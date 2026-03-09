@@ -8,13 +8,16 @@
 </head>
 
 <body>
+  <!-- 메인 페이지: 검색/리스트/작성 컴포넌트를 담는 루트 역할 -->
   <section id="page-main" class="page active">
     <div class="sticky-top-shell">
+      <!-- 상단 헤더: 앱 타이틀과 설정 이동 버튼 역할 -->
       <header class="popup-header">
         <div class="header-title">YME 메모</div>
         <button id="goPage3Btn" class="ds-btn ds-btn--ghost ds-btn--icon" title="설정 페이지로 이동">⚙️ 설정</button>
       </header>
 
+      <!-- 검색 영역: 제목/채널/메모 필터 입력 역할 -->
       <div id="searchContainer" class="search sticky-search">
         <div class="search-input-wrap">
           <input type="text" id="searchInput" class="ds-input" placeholder="제목/채널/메모 검색" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -36,6 +39,7 @@
       -->
     </div>
 
+    <!-- 하단 작성 시트: 기본노트/타임노트 작성 역할 -->
     <section id="memoComposerSheet" class="memo-composer-sheet expanded">
       <div id="memoSheetHandle" class="memo-sheet-handle-wrap">
         <button id="memoSheetToggleBtn" class="memo-sheet-handle" type="button" aria-label="노트 작성 영역 토글"></button>
@@ -60,6 +64,7 @@
     </section>
   </section>
 
+  <!-- 설정 페이지: 표시 토글/백업/복원/삭제 기능 역할 -->
   <section id="page-settings" class="page">
     <div class="sub-header">
       <button id="backFromSettingsBtn" class="ds-btn ds-btn--ghost">← 뒤로가기</button>
@@ -81,6 +86,7 @@
     </div>
   </section>
 
+  <!-- 타임노트 페이지: 영상별 일반노트/타임노트 목록 열람 역할 -->
   <section id="page-time-notes" class="page">
     <div class="time-notes-header">
       <button id="backFromTimeNotesBtn" class="ds-btn ds-btn--ghost">←</button>
@@ -110,6 +116,7 @@
     </div>
   </section>
 
+  <!-- 공통 모달: 확인/입력 다이얼로그 표시 역할 -->
   <div id="customModal" class="custom-modal">
     <div class="custom-modal-panel">
       <div id="customModalMessage" class="custom-modal-message"></div>

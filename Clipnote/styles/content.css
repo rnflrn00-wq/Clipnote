@@ -1,37 +1,121 @@
-/*#yt-memo-box {
+/* 플레이어 오버레이 메모 루트: 마우스 위치 근처에 떠 있는 메모 컨테이너 역할 */
+#yt-memo-box {
   position: fixed;
-  top: 80px;
-  right: 20px;
-  background: #111;
-  color: #fff;
-  padding: 14px;
+  z-index: 99999;
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* 현재 영상의 기본 메모 문단 역할 */
+.yt-memo-main {
+  color: var(--clip-note-color-gray-10);
+  background: color-mix(in srgb, var(--clip-note-color-gray-100) 72%, transparent);
+  padding: 6px 10px;
+  border-radius: var(--clip-note-radius-xs);
+  width: fit-content;
+  max-width: 260px;
+  margin-bottom: 4px;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* 타임 메모 알림 문단 역할 */
+.yt-memo-time-item {
+  color: color-mix(in srgb, var(--clip-note-color-gray-10) 80%, var(--clip-note-color-gray-20));
+  background: color-mix(in srgb, var(--clip-note-color-gray-100) 72%, transparent);
+  padding: 6px 10px;
+  border-radius: var(--clip-note-radius-xs);
+  width: fit-content;
+  max-width: 260px;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* 코치마크: 시간 메모를 빠르게 입력하는 미니 패널 역할 */
+.yt-memo-coach {
+  position: fixed;
+  z-index: 2147483647;
   width: 260px;
-  border-radius: 8px;
-  z-index: 999999;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  font-size: 14px;
-}
-  */
-
-#yt-memo-box button {
-  margin-top: 6px;
-  padding: 4px 8px;
-  background: #ff0000;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.bottom-actions {
-  position: sticky;
-  bottom: 0;
-  z-index: 999;
-  background: #fff;
-  border-top: 1px solid #eee;
-  padding-top: 8px;
-  margin-top: 10px;
+  background: color-mix(in srgb, var(--clip-note-color-gray-95) 96%, transparent);
+  border: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 22%, transparent);
+  border-radius: var(--clip-note-radius-md);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--clip-note-color-gray-100) 38%, transparent);
+  color: var(--clip-note-color-gray-10);
+  padding: 10px;
   display: flex;
-  gap: 6px;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+/* 코치마크 제목 문단 역할 */
+.yt-memo-coach__title { font-size: 12px; font-weight: 600; color: color-mix(in srgb, var(--clip-note-color-gray-10) 90%, transparent); }
+
+/* 코치마크 시간 표시 문단 역할 */
+.yt-memo-coach__time { font-size: 12px; color: var(--clip-note-color-blue-20); }
+
+/* 코치마크 입력 컴포넌트 역할 */
+.yt-memo-coach__input {
+  min-height: 64px;
+  resize: none;
+  border-radius: var(--clip-note-radius-sm);
+  border: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 20%, transparent);
+  background: color-mix(in srgb, var(--clip-note-color-gray-10) 8%, transparent);
+  color: var(--clip-note-color-gray-10);
+  padding: 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+/* 코치마크 버튼 그룹 역할 */
+.yt-memo-coach__actions { display: flex; justify-content: flex-end; gap: 6px; }
+.yt-memo-coach__btn { border: 0; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.yt-memo-coach__btn--cancel { color: color-mix(in srgb, var(--clip-note-color-gray-10) 85%, transparent); background: color-mix(in srgb, var(--clip-note-color-gray-10) 12%, transparent); }
+.yt-memo-coach__btn--save { color: var(--clip-note-color-gray-100); background: var(--clip-note-color-blue-10); }
+
+/* 사이드 패널: 영상 우측에 노트를 정리하는 메인 컴포넌트 역할 */
+#yt-memo-secondary-panel { width: 100%; box-sizing: border-box; margin: 0 0 12px; padding: 12px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 12%, transparent); background: color-mix(in srgb, var(--clip-note-color-gray-90) 95%, transparent); color: var(--clip-note-color-gray-10); font-family: Roboto, Arial, sans-serif; }
+.yt-memo-secondary-panel__head { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; margin-bottom: 10px; }
+.yt-memo-secondary-panel__head-btn { border: 0; border-radius: 999px; padding: 6px 10px; background: color-mix(in srgb, var(--clip-note-color-gray-10) 12%, transparent); color: var(--clip-note-color-gray-10); cursor: pointer; font-size: 12px; font-weight: 600; }
+.yt-memo-secondary-panel__head-title { font-size: 13px; font-weight: 700; color: color-mix(in srgb, var(--clip-note-color-gray-10) 88%, transparent); }
+.yt-memo-secondary-panel__video { display: grid; grid-template-columns: 110px 1fr; gap: 10px; margin-bottom: 12px; }
+.yt-memo-secondary-panel__thumb { width: 110px; height: 62px; border-radius: var(--clip-note-radius-sm); object-fit: cover; }
+.yt-memo-secondary-panel__channel { font-size: 11px; color: color-mix(in srgb, var(--clip-note-color-gray-10) 72%, transparent); margin-bottom: 4px; }
+.yt-memo-secondary-panel__video-title { font-size: 13px; font-weight: 600; line-height: 1.35; word-break: break-word; }
+.yt-memo-secondary-panel__section { margin-bottom: 10px; }
+.yt-memo-secondary-panel__section-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--clip-note-color-blue-20); }
+.yt-memo-secondary-panel__base, .yt-memo-secondary-panel__empty { font-size: 13px; line-height: 1.45; color: color-mix(in srgb, var(--clip-note-color-gray-10) 92%, transparent); white-space: pre-wrap; word-break: break-word; }
+.yt-memo-secondary-panel__row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+.yt-memo-secondary-panel__more { border: 0; background: color-mix(in srgb, var(--clip-note-color-gray-10) 12%, transparent); color: var(--clip-note-color-gray-10); border-radius: 999px; font-size: 12px; cursor: pointer; min-width: 28px; height: 24px; }
+.yt-memo-secondary-panel__more-menu { display: none; gap: 6px; }
+.yt-memo-secondary-panel__more-menu.is-open { display: flex; }
+.yt-memo-secondary-panel__menu-btn { border: 0; border-radius: 999px; padding: 4px 8px; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--clip-note-color-gray-100); background: var(--clip-note-color-blue-10); }
+.yt-memo-secondary-panel__menu-btn--danger { color: var(--clip-note-color-gray-10); background: var(--clip-note-color-gray-70); }
+.yt-memo-secondary-panel__timeline { display: flex; flex-direction: column; gap: 6px; max-height: min(34vh, 320px); overflow-y: auto; scrollbar-gutter: stable both-edges; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--clip-note-color-blue-20) 95%, transparent) transparent; padding-right: 2px; }
+.yt-memo-secondary-panel__timeline::-webkit-scrollbar { width: 8px; }
+.yt-memo-secondary-panel__timeline::-webkit-scrollbar-track { background: transparent; }
+.yt-memo-secondary-panel__timeline::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--clip-note-color-blue-20) 95%, transparent); border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+.yt-memo-secondary-panel__item { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; border: 0; border-radius: var(--clip-note-radius-sm); background: color-mix(in srgb, var(--clip-note-color-gray-10) 6%, transparent); padding: 7px 8px; text-align: left; color: inherit; }
+.yt-memo-secondary-panel__item-main { border: 0; background: transparent; padding: 0; text-align: left; color: inherit; cursor: pointer; display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; }
+.yt-memo-secondary-panel__item:hover { background: color-mix(in srgb, var(--clip-note-color-blue-20) 18%, transparent); }
+.yt-memo-secondary-panel__item.is-active { background: color-mix(in srgb, var(--clip-note-color-blue-20) 34%, transparent); border: 1px solid color-mix(in srgb, var(--clip-note-color-blue-20) 65%, transparent); }
+.yt-memo-secondary-panel__time { font-size: 12px; font-weight: 700; color: var(--clip-note-color-blue-20); min-width: 40px; }
+.yt-memo-secondary-panel__text { font-size: 12px; color: color-mix(in srgb, var(--clip-note-color-gray-10) 92%, transparent); white-space: pre-wrap; word-break: break-word; line-height: 1.35; }
+.yt-memo-secondary-panel__composer { margin-top: 10px; padding-top: 10px; border-top: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 14%, transparent); display: flex; flex-direction: column; gap: 8px; }
+.yt-memo-secondary-panel__composer-time { font-size: 12px; color: color-mix(in srgb, var(--clip-note-color-gray-10) 72%, transparent); }
+.yt-memo-secondary-panel__composer-input { min-height: 62px; resize: none; border-radius: var(--clip-note-radius-sm); border: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 20%, transparent); background: color-mix(in srgb, var(--clip-note-color-gray-10) 8%, transparent); color: var(--clip-note-color-gray-10); padding: 8px; font-size: 12px; outline: none; }
+.yt-memo-secondary-panel__composer-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.yt-memo-secondary-panel__composer-btn { border: 0; border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--clip-note-color-gray-100); background: var(--clip-note-color-blue-10); cursor: pointer; position: relative; }
+.yt-memo-secondary-panel__composer-btn--base { background: color-mix(in srgb, var(--clip-note-color-gray-10) 75%, transparent); }
+.yt-memo-secondary-panel__composer-btn--time:hover::after, .yt-memo-secondary-panel__composer-btn--time:focus-visible::after { content: "shift+enter"; position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 6px); font-size: 11px; color: var(--clip-note-color-gray-10); background: color-mix(in srgb, var(--clip-note-color-gray-100) 90%, transparent); border: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 20%, transparent); border-radius: 6px; padding: 3px 6px; white-space: nowrap; }
+.yt-memo-secondary-panel__toast { position: sticky; bottom: 0; margin-top: 6px; margin-left: auto; max-width: 100%; width: fit-content; font-size: 12px; line-height: 1.35; color: var(--clip-note-color-gray-10); background: color-mix(in srgb, var(--clip-note-color-gray-100) 86%, transparent); border: 1px solid color-mix(in srgb, var(--clip-note-color-gray-10) 20%, transparent); border-radius: var(--clip-note-radius-sm); padding: 6px 10px; box-shadow: 0 10px 20px color-mix(in srgb, var(--clip-note-color-gray-100) 25%, transparent); opacity: 0; transform: translateY(4px); transition: opacity 0.16s ease, transform 0.16s ease; pointer-events: none; z-index: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.yt-memo-secondary-panel__toast.is-visible { opacity: 1; transform: translateY(0); }
+.yt-memo-progress-dot-layer { position: absolute; inset: 0; pointer-events: none; z-index: 35; }
+.yt-memo-progress-dot { position: absolute; top: 50%; width: 8px; height: 8px; border-radius: 50%; transform: translate(-50%, -50%); background: var(--clip-note-color-blue-20); box-shadow: 0 0 0 2px color-mix(in srgb, var(--clip-note-color-gray-100) 35%, transparent); }
+
+@media (max-width: 1200px) {
+  #yt-memo-secondary-panel { margin-bottom: 10px; padding: 10px; }
 }
